@@ -57,11 +57,57 @@ app.get('/files/:key', async (req, res) => {
   res.json({ files });
 });
 
+
 // Download file by id
 app.get('/download/:id', async (req, res) => {
   const file = await File.findById(req.params.id);
   if (!file) return res.status(404).send('File not found');
   res.download(path.join(uploadDir, file.filename), file.originalName);
+});
+
+
+// Delete all files for a key
+app.delete('/files/:key', async (req, res) => {
+  try {
+    const files = await File.find({ key: req.params.key });
+    if (!files.length) return res.status(404).json({ error: 'No files found for this key' });
+    // Remove files from disk
+    for (const file of files) {
+      const filePath = path.join(uploadDir, file.filename);
+      try {
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      } catch (err) {
+        // Ignore file not found errors
+      }
+    }
+    // Remove from database
+    await File.deleteMany({ key: req.params.key });
+    res.json({ success: true, deleted: files.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete files' });
+  }
+});
+
+// Delete a single file by its ID
+app.delete('/file/:id', async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+    if (!file) return res.status(404).json({ error: 'File not found' });
+    const filePath = path.join(uploadDir, file.filename);
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (err) {
+      // Ignore file not found errors
+    }
+    await File.deleteOne({ _id: req.params.id });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
