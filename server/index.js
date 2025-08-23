@@ -25,7 +25,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sharefiles');
+// mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sharefiles');
+mongoose.connect(process.env.MONGO_URI);
 const fileSchema = new mongoose.Schema({
   key: String,
   originalName: String,
