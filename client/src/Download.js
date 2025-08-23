@@ -16,7 +16,7 @@ function Download() {
     if (!window.confirm('Are you sure you want to delete all files for this key?')) return;
     setDeleting(true);
     try {
-      const res = await fetch(`https://file-sharing-webapp-1.onrender.com//files/${key}`, { method: 'DELETE' });
+      const res = await fetch(`https://file-sharing-webapp-1.onrender.com/files/${key}`, { method: 'DELETE' });
       if (res.ok) {
         const data = await res.json();
         setFiles([]);
@@ -37,7 +37,7 @@ function Download() {
     }
     setLoading(true);
     try {
-      const res = await fetch(`https://file-sharing-webapp-1.onrender.com//files/${key}`);
+      const res = await fetch(`https://file-sharing-webapp-1.onrender.com/files/${key}`);
       if (res.ok) {
         const data = await res.json();
         setFiles(data.files);
@@ -76,7 +76,7 @@ function Download() {
         {files.map((file, idx) => (
           <ListItem key={idx} display="flex" alignItems="center" justifyContent="space-between" color={{ base: 'brand.500', _dark: 'white' }}>
             <Box>
-              <Link href={`https://file-sharing-webapp-1.onrender.com//download/${file._id}`} isExternal color={{ base: 'brand.400', _dark: 'accent.100' }}>
+              <Link href={`https://file-sharing-webapp-1.onrender.com/download/${file._id}`} isExternal color={{ base: 'brand.400', _dark: 'accent.100' }}>
                 {file.originalName}
               </Link>
             </Box>
@@ -84,7 +84,7 @@ function Download() {
               onClick={async () => {
                 if (!window.confirm(`Delete file '${file.originalName}'?`)) return;
                 try {
-                  const res = await fetch(`https://file-sharing-webapp-1.onrender.com//file/${file._id}`, { method: 'DELETE' });
+                  const res = await fetch(`https://file-sharing-webapp-1.onrender.com/file/${file._id}`, { method: 'DELETE' });
                   if (res.ok) {
                     setFiles(prev => prev.filter(f => f._id !== file._id));
                     toast({ title: `Deleted '${file.originalName}'.`, status: 'success' });

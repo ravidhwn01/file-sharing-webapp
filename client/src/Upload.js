@@ -25,7 +25,7 @@ function Upload() {
     }
     formData.append('key', key);
     try {
-      const res = await fetch('https://file-sharing-webapp-1.onrender.com//upload', {
+      const res = await fetch('https://file-sharing-webapp-1.onrender.com/upload', {
         method: 'POST',
         body: formData,
       });
