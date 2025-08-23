@@ -25,7 +25,7 @@ function Upload() {
     }
     formData.append('key', key);
     try {
-      const res = await fetch('http://localhost:5000/upload', {
+      const res = await fetch('http://localhost:10000/upload', {
         method: 'POST',
         body: formData,
       });
